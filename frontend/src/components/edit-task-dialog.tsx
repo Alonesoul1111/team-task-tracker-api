@@ -272,7 +272,7 @@ export default function EditTaskDialog({ isOpen, onClose, task }: EditTaskDialog
             
           </form>
 
-          {/* ─────────── Sub-tasks Section ─────────── */}
+          {/* Sub-tasks Section */}
           <div className="mt-10 pt-8 border-t border-slate-800/60">
             <h4 className="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-indigo-400" />
@@ -317,7 +317,7 @@ export default function EditTaskDialog({ isOpen, onClose, task }: EditTaskDialog
             </form>
           </div>
 
-          {/* ─────────── Comments Section ─────────── */}
+          {/* Comments Section */}
           <div className="mt-10 pt-8 border-t border-slate-800/60">
             <h4 className="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
               <MessageSquare className="h-4 w-4 text-indigo-400" />

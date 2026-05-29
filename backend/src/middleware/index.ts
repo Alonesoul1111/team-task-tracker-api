@@ -7,7 +7,7 @@ import { env } from '../config/env';
 import { prisma } from '../config/database';
 import { Role } from '@prisma/client';
 
-// ─────────── Type Extensions ───────────
+// Type Extensions
 
 declare global {
   namespace Express {
@@ -22,7 +22,7 @@ declare global {
   }
 }
 
-// ─────────── Global Error Handler ───────────
+// Global Error Handler
 
 export const errorHandler = (
   err: Error,
@@ -56,7 +56,7 @@ export const errorHandler = (
   });
 };
 
-// ─────────── Request Validation ───────────
+// Request Validation
 
 export const validate = (schema: ZodSchema, source: 'body' | 'query' | 'params' = 'body') => {
   return (req: Request, _res: Response, next: NextFunction): void => {
@@ -75,7 +75,7 @@ export const validate = (schema: ZodSchema, source: 'body' | 'query' | 'params' 
   };
 };
 
-// ─────────── Authentication Middleware ───────────
+// Authentication Middleware
 
 export const authenticate = async (
   req: Request,
@@ -122,7 +122,7 @@ export const authenticate = async (
   }
 };
 
-// ─────────── RBAC Middleware ───────────
+// RBAC Middleware
 // Enforces role-based access at the middleware layer, NOT in controllers.
 
 export const authorize = (...allowedRoles: Role[]) => {
@@ -147,7 +147,7 @@ export const authorize = (...allowedRoles: Role[]) => {
   };
 };
 
-// ─────────── Organization Scope Middleware ───────────
+// Organization Scope Middleware
 // Ensures users can only access data within their organization
 
 export const scopeToOrganization = (
@@ -163,7 +163,7 @@ export const scopeToOrganization = (
   next();
 };
 
-// ─────────── Async Route Handler Wrapper ───────────
+// Async Route Handler Wrapper
 
 export const asyncHandler = (
   fn: (req: Request, res: Response, next: NextFunction) => Promise<any>

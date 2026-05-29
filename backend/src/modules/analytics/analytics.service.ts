@@ -1,14 +1,7 @@
 import { prisma } from '../../config/database';
 import { logger } from '../../utils/logger';
 
-/**
- * Analytics Service — advanced SQL aggregations for dashboard insights.
- */
 export class AnalyticsService {
-  /**
-   * Get comprehensive analytics overview for the organization.
-   * Uses raw SQL with window functions for complex aggregations.
-   */
   async getOverview(organizationId: string) {
     // 1. Task status distribution
     const statusDistribution = await prisma.task.groupBy({

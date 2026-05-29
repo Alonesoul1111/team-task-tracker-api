@@ -85,7 +85,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
-      {/* ─── DESKTOP SIDEBAR ─── */}
+      {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:flex md:w-64 md:flex-col glass-panel border-r border-slate-900">
         {/* Brand */}
         <div className="flex h-16 items-center px-6 gap-2 border-b border-slate-900">
@@ -148,7 +148,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      {/* ─── MAIN CONTENT AREA ─── */}
+      {/* MAIN CONTENT AREA */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Top Header */}
         <header className="flex h-16 items-center justify-between px-6 border-b border-slate-900/50 glass-panel">
@@ -255,7 +255,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </main>
       </div>
 
-      {/* ─── MOBILE SIDEBAR MENU ─── */}
+      {/* MOBILE SIDEBAR MENU */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden bg-slate-950/80 backdrop-blur-sm">
           <div className="relative flex w-full max-w-xs flex-col bg-slate-950 border-r border-slate-900 p-6">

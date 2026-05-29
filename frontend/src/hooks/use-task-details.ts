@@ -19,7 +19,7 @@ export interface SubTask {
   createdAt: string;
 }
 
-// ─────────── Comments ───────────
+// Comments
 
 export function useComments(taskId?: string) {
   return useQuery({
@@ -46,7 +46,7 @@ export function useAddComment() {
   });
 }
 
-// ─────────── Sub-tasks ───────────
+// Sub-tasks
 
 export function useSubTasks(taskId?: string) {
   return useQuery({

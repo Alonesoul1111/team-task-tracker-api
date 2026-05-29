@@ -146,7 +146,7 @@ export default function TasksPage() {
         </div>
       </div>
 
-      {/* ─── FILTERS ─── */}
+      {/* FILTERS */}
       <div className="glass-panel p-4 rounded-2xl mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 border border-slate-900">
         <div className="relative">
           <Search className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
@@ -211,7 +211,7 @@ export default function TasksPage() {
         </div>
       </div>
 
-      {/* ─── KANBAN BOARD COLUMNS ─── */}
+      {/* KANBAN BOARD COLUMNS */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-12">
         {COLUMNS.map((column) => {
           const columnTasks = tasks.filter((t) => t.status === column.id);

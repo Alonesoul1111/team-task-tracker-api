@@ -2,10 +2,6 @@ import { Request, Response } from 'express';
 import { authService } from './auth.service';
 import { ApiResponse } from '../../utils/response';
 
-/**
- * Auth Controller — thin wrappers around service methods.
- * No business logic here.
- */
 export class AuthController {
   async register(req: Request, res: Response) {
     const result = await authService.register(req.body);

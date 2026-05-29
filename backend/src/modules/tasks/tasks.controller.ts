@@ -108,7 +108,7 @@ export class TasksController {
     return ApiResponse.noContent(res);
   }
 
-  // ─────────── Comments ───────────
+  // Comments
 
   async getComments(req: Request, res: Response) {
     const comments = await tasksService.getComments(req.params.id as string, req.user!.organizationId);
@@ -125,7 +125,7 @@ export class TasksController {
     return ApiResponse.created(res, comment);
   }
 
-  // ─────────── Sub-tasks ───────────
+  // Sub-tasks
 
   async getSubTasks(req: Request, res: Response) {
     const subtasks = await tasksService.getSubTasks(req.params.id as string, req.user!.organizationId);

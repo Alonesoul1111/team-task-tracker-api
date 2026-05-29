@@ -8,15 +8,7 @@ import { logger } from '../../utils/logger';
 import { RegisterInput, LoginInput } from './auth.validation';
 import { Role } from '@prisma/client';
 
-/**
- * Auth Service — all authentication business logic lives here.
- * Controllers should be thin wrappers calling these methods.
- */
 export class AuthService {
-  /**
-   * Register a new user.
-   * Creates an organization if organizationName is provided.
-   */
   async register(input: RegisterInput) {
     // Check for existing user
     const existing = await prisma.user.findUnique({
@@ -90,9 +82,6 @@ export class AuthService {
     };
   }
 
-  /**
-   * Login with email/password.
-   */
   async login(input: LoginInput) {
     const user = await prisma.user.findUnique({
       where: { email: input.email },
@@ -135,11 +124,6 @@ export class AuthService {
     };
   }
 
-  /**
-   * Refresh access token using a valid refresh token.
-   * Implements token rotation: old refresh token is revoked,
-   * a new pair is issued.
-   */
   async refreshToken(refreshTokenValue: string) {
     // Hash the incoming token to compare with stored hash
     const tokenHash = this.hashToken(refreshTokenValue);
@@ -185,9 +169,6 @@ export class AuthService {
     };
   }
 
-  /**
-   * Logout: revoke all refresh tokens for the user.
-   */
   async logout(userId: string) {
     await prisma.refreshToken.updateMany({
       where: { userId, revoked: false },

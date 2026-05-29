@@ -10,7 +10,7 @@ import {
   ListTasksQuery,
 } from './tasks.validation';
 
-// ─────────── Status Transition Rules ───────────
+// Status Transition Rules
 // Centralized state machine for task status transitions.
 // Valid transitions:
 //   TODO → IN_PROGRESS → IN_REVIEW → DONE
@@ -26,9 +26,6 @@ const VALID_TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
 };
 
 export class TasksService {
-  /**
-   * Create a new task.
-   */
   async create(input: CreateTaskInput, creatorId: string, organizationId: string) {
     // Verify project belongs to organization
     const project = await prisma.project.findFirst({
@@ -73,9 +70,6 @@ export class TasksService {
     return task;
   }
 
-  /**
-   * List tasks with filtering, pagination, and caching.
-   */
   async list(params: ListTasksQuery, userId: string, role: Role, organizationId: string) {
     // Build filter conditions
     const where: Prisma.TaskWhereInput = {
@@ -147,9 +141,6 @@ export class TasksService {
     return result;
   }
 
-  /**
-   * Get a single task by ID.
-   */
   async getById(taskId: string, userId: string, role: Role, organizationId: string) {
     const task = await prisma.task.findFirst({
       where: {
@@ -172,9 +163,6 @@ export class TasksService {
     return task;
   }
 
-  /**
-   * Update task fields (NOT status — use updateStatus for that).
-   */
   async update(
     taskId: string,
     input: UpdateTaskInput,
@@ -232,10 +220,6 @@ export class TasksService {
     return updated;
   }
 
-  /**
-   * Update task status with server-enforced transition rules.
-   * Only the assignee OR a MANAGER/ADMIN can advance status.
-   */
   async updateStatus(
     taskId: string,
     input: UpdateTaskStatusInput,
@@ -302,9 +286,6 @@ export class TasksService {
     };
   }
 
-  /**
-   * Delete a task.
-   */
   async delete(taskId: string, userId: string, role: Role, organizationId: string) {
     const task = await prisma.task.findFirst({
       where: {
@@ -328,7 +309,7 @@ export class TasksService {
     logger.info(`Task deleted: ${taskId} by ${userId}`);
   }
 
-  // ─────────── Comments ───────────
+  // Comments
 
   async getComments(taskId: string, organizationId: string) {
     const task = await prisma.task.findFirst({
@@ -356,7 +337,7 @@ export class TasksService {
     return comment;
   }
 
-  // ─────────── Sub-tasks ───────────
+  // Sub-tasks
 
   async getSubTasks(taskId: string, organizationId: string) {
     const task = await prisma.task.findFirst({

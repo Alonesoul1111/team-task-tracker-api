@@ -1,8 +1,5 @@
 import { Response } from 'express';
 
-/**
- * Standardized API response helpers.
- */
 export const ApiResponse = {
   success<T>(res: Response, data: T, status = 200) {
     return res.status(status).json({

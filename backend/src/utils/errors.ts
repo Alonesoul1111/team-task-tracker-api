@@ -1,7 +1,3 @@
-/**
- * Custom application error class for structured error responses.
- * Provides consistent error formatting across the API.
- */
 export class AppError extends Error {
   public readonly status: number;
   public readonly code: string;
@@ -27,7 +23,7 @@ export class AppError extends Error {
   }
 }
 
-// ─────────── Pre-built Error Factories ───────────
+// Pre-built Error Factories
 
 export const Errors = {
   // Auth errors

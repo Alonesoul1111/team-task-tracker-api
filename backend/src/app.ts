@@ -21,7 +21,7 @@ import { analyticsRoutes } from './modules/analytics/analytics.routes';
 
 const app = express();
 
-// ─────────── Security Middleware ───────────
+// Security Middleware
 app.use(helmet());
 app.use(cors({
   origin: env.CORS_ORIGIN,
@@ -30,7 +30,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// ─────────── Rate Limiting ───────────
+// Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
@@ -44,24 +44,24 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// ─────────── Body Parsing & Utilities ───────────
+// Body Parsing & Utilities
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 
-// ─────────── Request Logging ───────────
+// Request Logging
 app.use(morgan('combined', {
   stream: { write: (message: string) => logger.info(message.trim()) },
 }));
 
-// ─────────── API Documentation ───────────
+// API Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'Task Tracker API Docs',
 }));
 
-// ─────────── Health Check ───────────
+// Health Check
 app.get('/health', (_req, res) => {
   res.json({
     status: 'healthy',
@@ -71,14 +71,14 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// ─────────── API Routes ───────────
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
-// ─────────── 404 Handler ───────────
+// 404 Handler
 app.use((_req, res) => {
   res.status(404).json({
     status: 404,
@@ -87,7 +87,7 @@ app.use((_req, res) => {
   });
 });
 
-// ─────────── Global Error Handler ───────────
+// Global Error Handler
 app.use(errorHandler);
 
 export { app };
