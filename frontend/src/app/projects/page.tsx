@@ -10,9 +10,7 @@ import {
   FolderGit, 
   Plus, 
   Search,
-  Calendar,
-  X,
-  FileText
+  X
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -67,42 +65,42 @@ export default function ProjectsPage() {
     <DashboardLayout>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-gradient">Projects</h1>
-          <p className="text-slate-400 mt-1">Manage and track projects for your team.</p>
+          <h1 className="page-title">Projects</h1>
+          <p className="text-[var(--text-secondary)] mt-1 text-[0.875rem]">Manage and track projects for your team.</p>
         </div>
 
         {/* Create Project Button (ADMIN & MANAGER only) */}
         {(user?.role === 'ADMIN' || user?.role === 'MANAGER') && (
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all cursor-pointer"
+            className="btn-primary flex items-center gap-2"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4" />
             New Project
           </button>
         )}
       </div>
 
       {/* Search Filter */}
-      <div className="glass-panel p-4 rounded-2xl mb-6 grid grid-cols-1 gap-4 border border-slate-900">
+      <div className="card p-4 mb-6 grid grid-cols-1 gap-4">
         <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" />
           <input
             id="project-search-input"
             type="text"
             placeholder="Search projects... (Cmd+K)"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 rounded-xl pl-10 pr-4 py-2 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all"
+            className="input pl-9"
           />
         </div>
       </div>
 
       {/* Projects Grid */}
       {projectsLoading ? (
-        <div className="h-64 flex items-center justify-center text-slate-500">Loading projects...</div>
+        <div className="h-64 flex items-center justify-center text-[var(--text-muted)] text-[0.875rem]">Loading projects...</div>
       ) : projects.length === 0 ? (
-        <div className="glass-card p-12 rounded-2xl border text-center text-slate-500 border-slate-900">
+        <div className="card p-12 text-center text-[var(--text-muted)] text-[0.875rem]">
           No projects found. Add a project to get started.
         </div>
       ) : (
@@ -113,34 +111,34 @@ export default function ProjectsPage() {
             const progress = projectTasks.length > 0 ? Math.round((doneTasks.length / projectTasks.length) * 100) : 0;
 
             return (
-              <div key={project.id} className="glass-card p-6 rounded-2xl border border-slate-900 flex flex-col justify-between">
+              <div key={project.id} className="card p-6 flex flex-col justify-between group">
                 <div>
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-3 bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 rounded-xl">
-                      <FolderGit className="h-6 w-6" />
+                    <div className="p-2.5 bg-[var(--brand-soft)] text-[var(--brand)] rounded-[10px] group-hover:scale-110 transition-transform">
+                      <FolderGit className="h-5 w-5" />
                     </div>
-                    <span className="text-3xs font-semibold text-slate-500 bg-slate-900 border border-slate-800/80 px-2 py-0.5 rounded-md">
+                    <span className="text-[0.6875rem] font-medium text-[var(--text-muted)] bg-[rgba(255,255,255,0.02)] border border-[var(--border-subtle)] px-2 py-0.5 rounded-[4px] uppercase tracking-wider">
                       Active
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-slate-100 mb-2 leading-snug">{project.name}</h3>
-                  <p className="text-sm text-slate-400 mb-6 line-clamp-3 leading-relaxed">
+                  <h3 className="text-[1.125rem] font-semibold text-[var(--text-primary)] mb-1.5 leading-snug group-hover:text-[var(--brand)] transition-colors">{project.name}</h3>
+                  <p className="text-[0.8125rem] text-[var(--text-secondary)] mb-6 line-clamp-3 leading-relaxed">
                     {project.description || 'No description provided.'}
                   </p>
                 </div>
 
-                <div className="space-y-4 pt-4 border-t border-slate-900/60">
-                  <div className="flex justify-between items-center text-xs text-slate-400">
+                <div className="space-y-4 pt-4 border-t border-[var(--border-subtle)]">
+                  <div className="flex justify-between items-center text-[0.75rem] text-[var(--text-secondary)]">
                     <span>Progress</span>
-                    <span className="font-semibold text-slate-200">{progress}%</span>
+                    <span className="font-medium text-[var(--text-primary)]">{progress}%</span>
                   </div>
 
-                  <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${progress}%` }}></div>
+                  <div className="w-full bg-[rgba(255,255,255,0.05)] h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-[var(--brand)] h-full rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
                   </div>
 
-                  <div className="flex justify-between text-2xs text-slate-500">
+                  <div className="flex justify-between text-[0.6875rem] text-[var(--text-muted)]">
                     <span>{projectTasks.length} Total Tasks</span>
                     <span>{doneTasks.length} Resolved</span>
                   </div>
@@ -153,20 +151,20 @@ export default function ProjectsPage() {
 
       {/* Create Project Modal */}
       {isCreateOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6">
-          <div className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-slate-950/90 rounded-2xl border border-slate-800/60 shadow-2xl overflow-hidden ring-1 ring-white/5">
+        <div className="modal-backdrop">
+          <div className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-[var(--bg-card)] rounded-[var(--radius-card)] border border-[var(--border-subtle)] shadow-2xl overflow-hidden ring-1 ring-white/5 mx-4">
             
             {/* Header - Sticky */}
-            <div className="flex justify-between items-center p-6 border-b border-slate-800/60 bg-slate-900/40">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <span className="h-8 w-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div className="flex justify-between items-center p-5 border-b border-[var(--border-subtle)] bg-[rgba(255,255,255,0.01)]">
+              <h3 className="text-[1.125rem] font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                <span className="h-7 w-7 rounded-[6px] bg-[var(--brand-soft)] flex items-center justify-center text-[var(--brand)]">
                   <FolderGit className="h-4 w-4" />
                 </span>
                 Create Project
               </h3>
               <button 
                 onClick={() => setIsCreateOpen(false)} 
-                className="p-2 -mr-2 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer"
+                className="p-1.5 rounded-[var(--radius-btn)] text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.05)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -174,23 +172,23 @@ export default function ProjectsPage() {
 
             {/* Scrollable Form Body */}
             <div className="overflow-y-auto p-6 flex-1 custom-scrollbar">
-              <form id="create-project-form" onSubmit={handleCreateProject} className="space-y-6">
+              <form id="create-project-form" onSubmit={handleCreateProject} className="space-y-5">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                    Project Name <span className="text-red-400">*</span>
+                  <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
+                    Project Name <span className="text-[#EF4444]">*</span>
                   </label>
                   <input
                     type="text"
                     value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
                     placeholder="e.g. Mobile App v2"
-                    className="w-full bg-slate-900/50 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all shadow-inner"
+                    className="input"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                  <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
                     Description
                   </label>
                   <textarea
@@ -198,18 +196,18 @@ export default function ProjectsPage() {
                     onChange={(e) => setProjectDesc(e.target.value)}
                     placeholder="Summarize project scope and targets..."
                     rows={4}
-                    className="w-full bg-slate-900/50 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all resize-none shadow-inner"
+                    className="input resize-none"
                   />
                 </div>
               </form>
             </div>
 
             {/* Footer - Sticky */}
-            <div className="flex justify-end gap-3 p-6 border-t border-slate-800/60 bg-slate-900/40 mt-auto">
+            <div className="flex justify-end gap-3 p-5 border-t border-[var(--border-subtle)] bg-[rgba(255,255,255,0.01)] mt-auto">
               <button
                 type="button"
                 onClick={() => setIsCreateOpen(false)}
-                className="py-2.5 px-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-xl text-sm transition-all cursor-pointer"
+                className="btn-secondary"
               >
                 Cancel
               </button>
@@ -217,7 +215,7 @@ export default function ProjectsPage() {
                 type="submit"
                 form="create-project-form"
                 disabled={createProject.isPending}
-                className="py-2.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl text-sm transition-all cursor-pointer shadow-lg shadow-indigo-500/25"
+                className="btn-primary"
               >
                 {createProject.isPending ? 'Creating...' : 'Create Project'}
               </button>

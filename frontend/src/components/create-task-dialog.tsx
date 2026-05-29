@@ -64,20 +64,20 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6">
-      <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-slate-950/90 rounded-2xl border border-slate-800/60 shadow-2xl overflow-hidden ring-1 ring-white/5">
+    <div className="modal-backdrop">
+      <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[var(--bg-card)] rounded-[var(--radius-card)] border border-[var(--border-subtle)] shadow-2xl overflow-hidden ring-1 ring-white/5 mx-4">
         
         {/* Header - Sticky */}
-        <div className="flex justify-between items-center p-6 border-b border-slate-800/60 bg-slate-900/40">
-          <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-            <span className="h-8 w-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+        <div className="flex justify-between items-center p-6 border-b border-[var(--border-subtle)] bg-[rgba(255,255,255,0.01)]">
+          <h3 className="text-[1.125rem] font-semibold text-[var(--text-primary)] flex items-center gap-2">
+            <span className="h-7 w-7 rounded-[6px] bg-[var(--brand-soft)] flex items-center justify-center text-[var(--brand)] text-lg leading-none">
               +
             </span>
             Create New Task
           </h3>
           <button 
             onClick={onClose} 
-            className="p-2 -mr-2 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer"
+            className="p-1.5 rounded-[var(--radius-btn)] text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.05)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -88,21 +88,21 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
           <form id="create-task-form" onSubmit={handleSubmit} className="space-y-6">
             
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                Task Title <span className="text-red-400">*</span>
+              <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
+                Task Title <span className="text-[#EF4444]">*</span>
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Design homepage wireframe"
-                className="w-full bg-slate-900/50 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all shadow-inner"
+                className="input"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
                 Description
               </label>
               <textarea
@@ -110,24 +110,24 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Add detailed task description..."
                 rows={4}
-                className="w-full bg-slate-900/50 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all resize-none shadow-inner"
+                className="input resize-none"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 rounded-xl border border-slate-800/50 bg-slate-900/20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[rgba(255,255,255,0.01)]">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Project <span className="text-red-400">*</span>
+                <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
+                  Project <span className="text-[#EF4444]">*</span>
                 </label>
                 <select
                   value={projectId}
                   onChange={(e) => setProjectId(e.target.value)}
-                  className="w-full bg-slate-900/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-slate-100 text-sm outline-none transition-all cursor-pointer shadow-inner appearance-none"
+                  className="input cursor-pointer appearance-none"
                   required
                 >
-                  <option value="" disabled className="text-slate-500">Select Project</option>
+                  <option value="" disabled className="text-[var(--text-muted)]">Select Project</option>
                   {projects.map((proj) => (
-                    <option key={proj.id} value={proj.id} className="bg-slate-900 text-slate-200">
+                    <option key={proj.id} value={proj.id} className="bg-[var(--bg-card)]">
                       {proj.name}
                     </option>
                   ))}
@@ -135,17 +135,17 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
                   Assignee
                 </label>
                 <select
                   value={assigneeId}
                   onChange={(e) => setAssigneeId(e.target.value)}
-                  className="w-full bg-slate-900/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-slate-100 text-sm outline-none transition-all cursor-pointer shadow-inner appearance-none"
+                  className="input cursor-pointer appearance-none"
                 >
-                  <option value="" className="text-slate-500">Unassigned</option>
+                  <option value="" className="text-[var(--text-muted)]">Unassigned</option>
                   {users.map((u) => (
-                    <option key={u.id} value={u.id} className="bg-slate-900 text-slate-200">
+                    <option key={u.id} value={u.id} className="bg-[var(--bg-card)]">
                       {u.name}
                     </option>
                   ))}
@@ -153,22 +153,22 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
                   Priority
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as any)}
-                  className="w-full bg-slate-900/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-slate-100 text-sm outline-none transition-all cursor-pointer shadow-inner appearance-none"
+                  className="input cursor-pointer appearance-none"
                 >
-                  <option value="LOW" className="bg-slate-900 text-slate-200">Low</option>
-                  <option value="MEDIUM" className="bg-slate-900 text-slate-200">Medium</option>
-                  <option value="HIGH" className="bg-slate-900 text-slate-200">High</option>
+                  <option value="LOW" className="bg-[var(--bg-card)] text-[#22C55E]">Low</option>
+                  <option value="MEDIUM" className="bg-[var(--bg-card)] text-[#F59E0B]">Medium</option>
+                  <option value="HIGH" className="bg-[var(--bg-card)] text-[#EF4444]">High</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
                   Due Date
                 </label>
                 <input
@@ -183,7 +183,7 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
                       }
                     } catch (err) {}
                   }}
-                  className="w-full bg-slate-900/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-slate-100 text-sm outline-none transition-all cursor-pointer shadow-inner [color-scheme:dark]"
+                  className="input cursor-pointer [color-scheme:dark]"
                 />
               </div>
             </div>
@@ -192,11 +192,11 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
         </div>
 
         {/* Footer - Sticky */}
-        <div className="flex justify-end gap-3 p-6 border-t border-slate-800/60 bg-slate-900/40 mt-auto">
+        <div className="flex justify-end gap-3 p-6 border-t border-[var(--border-subtle)] bg-[rgba(255,255,255,0.01)] mt-auto">
           <button
             type="button"
             onClick={onClose}
-            className="py-2.5 px-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-xl text-sm transition-all cursor-pointer"
+            className="btn-secondary"
           >
             Cancel
           </button>
@@ -204,7 +204,7 @@ export default function CreateTaskDialog({ isOpen, onClose }: CreateTaskDialogPr
             type="submit"
             form="create-task-form"
             disabled={createTask.isPending}
-            className="py-2.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl text-sm transition-all cursor-pointer shadow-lg shadow-indigo-500/25"
+            className="btn-primary"
           >
             {createTask.isPending ? 'Creating...' : 'Create Task'}
           </button>

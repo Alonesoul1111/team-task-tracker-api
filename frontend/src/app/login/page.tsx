@@ -39,23 +39,22 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-screen items-center justify-center bg-slate-950 px-4 py-12 relative overflow-hidden">
-      {/* Decorative backdrop elements */}
-      <div className="absolute top-1/4 left-1/4 h-[350px] w-[350px] rounded-full bg-indigo-600/10 blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 h-[350px] w-[350px] rounded-full bg-pink-600/10 blur-[100px] pointer-events-none"></div>
-
-      <div className="w-full max-w-md glass-panel p-8 rounded-2xl shadow-2xl relative z-10 border border-slate-900">
+    <div className="flex min-h-screen w-screen items-center justify-center bg-[var(--bg-app)] px-4 py-12 relative overflow-hidden">
+      {/* Decorative backdrop elements (subtle) */}
+      <div className="absolute top-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-[var(--brand)] opacity-[0.03] blur-[100px] pointer-events-none"></div>
+      
+      <div className="w-full max-w-md panel p-8 relative z-10">
         <div className="flex flex-col items-center mb-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 font-bold text-white shadow-lg shadow-indigo-500/30 text-xl mb-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--brand)] font-bold text-white shadow-lg shadow-[var(--brand-glow)] text-lg mb-5">
             A
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-gradient">Welcome back</h2>
-          <p className="text-slate-400 text-sm mt-1.5">Sign in to your AeroTask account</p>
+          <h2 className="text-[1.5rem] font-semibold tracking-tight text-[var(--text-primary)]">Welcome back</h2>
+          <p className="text-[var(--text-secondary)] text-[0.875rem] mt-1.5">Sign in to your AeroTask account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)] mb-1.5">
               Email Address
             </label>
             <input
@@ -63,14 +62,14 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@company.com"
-              className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all duration-200"
+              className="input"
               required
             />
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-[0.75rem] font-medium text-[var(--text-secondary)]">
                 Password
               </label>
             </div>
@@ -79,7 +78,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all duration-200"
+              className="input"
               required
             />
           </div>
@@ -87,7 +86,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 text-white font-semibold rounded-xl text-sm shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+            className="btn-primary w-full mt-2 flex items-center justify-center gap-2"
           >
             {isSubmitting ? (
               <>
@@ -100,9 +99,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-8 text-center text-sm border-t border-slate-900/60 pt-6">
-          <span className="text-slate-500">Don&apos;t have an account? </span>
-          <Link href="/register" className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
+        <div className="mt-8 text-center text-[0.875rem] border-t border-[var(--border-subtle)] pt-6">
+          <span className="text-[var(--text-muted)]">Don&apos;t have an account? </span>
+          <Link href="/register" className="font-medium text-[var(--brand)] hover:text-[var(--brand-hover)] transition-colors">
             Create an account
           </Link>
         </div>

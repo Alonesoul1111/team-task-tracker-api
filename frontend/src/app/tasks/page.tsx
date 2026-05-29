@@ -7,28 +7,23 @@ import { useProjects, useUsers } from '@/hooks/use-data';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useAuthStore } from '@/store/auth';
 import { 
-  KanbanSquare, 
   Search, 
-  Filter, 
   Plus, 
-  Calendar,
   AlertTriangle,
-  ArrowRight,
-  User as UserIcon,
   RotateCcw
 } from 'lucide-react';
-import { statusColors, priorityColors } from '@/lib/utils';
+import { statusConfig, priorityConfig } from '@/lib/utils';
 import EditTaskDialog from '@/components/edit-task-dialog';
 import CreateTaskDialog from '@/components/create-task-dialog';
 import type { Task } from '@/lib/types';
 import { toast } from 'sonner';
 
 const COLUMNS = [
-  { id: 'TODO', title: 'To Do', color: 'bg-slate-900 border-slate-800' },
-  { id: 'IN_PROGRESS', title: 'In Progress', color: 'bg-slate-900 border-blue-900/20' },
-  { id: 'IN_REVIEW', title: 'In Review', color: 'bg-slate-900 border-amber-900/20' },
-  { id: 'DONE', title: 'Done', color: 'bg-slate-900 border-emerald-900/20' },
-  { id: 'BLOCKED', title: 'Blocked', color: 'bg-slate-900 border-red-900/20' },
+  { id: 'TODO', title: 'To Do', borderColor: 'border-[var(--border-subtle)]' },
+  { id: 'IN_PROGRESS', title: 'In Progress', borderColor: 'border-[rgba(59,130,246,0.3)]' },
+  { id: 'IN_REVIEW', title: 'In Review', borderColor: 'border-[rgba(245,158,11,0.3)]' },
+  { id: 'DONE', title: 'Done', borderColor: 'border-[rgba(34,197,94,0.3)]' },
+  { id: 'BLOCKED', title: 'Blocked', borderColor: 'border-[rgba(239,68,68,0.3)]' },
 ];
 
 export default function TasksPage() {
@@ -51,12 +46,10 @@ export default function TasksPage() {
   // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Cmd+K or Ctrl+K to focus search
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         document.getElementById('task-search-input')?.focus();
       }
-      // 'n' or 'N' to open new task modal
       if ((e.key === 'n' || e.key === 'N') && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
         if (user?.role === 'ADMIN' || user?.role === 'MANAGER') {
           e.preventDefault();
@@ -110,7 +103,7 @@ export default function TasksPage() {
 
     try {
       await updateTaskStatus.mutateAsync({ id: taskId, status: targetStatus });
-      toast.success(`Task status updated to ${targetStatus.replace('_', ' ')}`);
+      toast.success(`Task status updated`);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Invalid status transition');
     }
@@ -120,14 +113,14 @@ export default function TasksPage() {
     <DashboardLayout>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-gradient">Kanban Board</h1>
-          <p className="text-slate-400 mt-1">Manage and track tasks in real time.</p>
+          <h1 className="page-title">Kanban Board</h1>
+          <p className="text-[var(--text-secondary)] mt-1 text-[0.875rem]">Manage and track tasks in real time.</p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={handleResetFilters}
-            className="flex items-center gap-1.5 px-3 py-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl text-xs transition-all cursor-pointer"
+            className="btn-secondary flex items-center gap-1.5"
             title="Reset Filters"
           >
             <RotateCcw className="h-4 w-4" />
@@ -137,9 +130,9 @@ export default function TasksPage() {
           {(user?.role === 'ADMIN' || user?.role === 'MANAGER') && (
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all cursor-pointer"
+              className="btn-primary flex items-center gap-2"
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="h-4 w-4" />
               New Task
             </button>
           )}
@@ -147,16 +140,16 @@ export default function TasksPage() {
       </div>
 
       {/* FILTERS */}
-      <div className="glass-panel p-4 rounded-2xl mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 border border-slate-900">
+      <div className="card p-4 mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" />
           <input
             id="task-search-input"
             type="text"
             placeholder="Search tasks... (Cmd+K)"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 rounded-xl pl-10 pr-4 py-2 text-slate-100 placeholder:text-slate-600 text-sm outline-none transition-all"
+            className="input pl-9"
           />
         </div>
 
@@ -164,7 +157,7 @@ export default function TasksPage() {
           <select
             value={projectId}
             onChange={(e) => setProjectId(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 rounded-xl px-4 py-2 text-slate-100 text-sm outline-none transition-all cursor-pointer"
+            className="input cursor-pointer appearance-none"
           >
             <option value="">All Projects</option>
             {projects.map((proj) => (
@@ -180,7 +173,7 @@ export default function TasksPage() {
             value={assigneeId}
             disabled={user?.role === 'MEMBER'}
             onChange={(e) => setAssigneeId(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 rounded-xl px-4 py-2 text-slate-100 text-sm outline-none transition-all cursor-pointer disabled:opacity-50"
+            className="input cursor-pointer appearance-none disabled:opacity-50"
           >
             {user?.role === 'MEMBER' ? (
               <option value={user.id}>Assigned to me</option>
@@ -201,7 +194,7 @@ export default function TasksPage() {
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
-            className="w-full bg-slate-950/60 border border-slate-800 focus:border-indigo-500/50 rounded-xl px-4 py-2 text-slate-100 text-sm outline-none transition-all cursor-pointer"
+            className="input cursor-pointer appearance-none"
           >
             <option value="">All Priorities</option>
             <option value="LOW">Low Priority</option>
@@ -212,81 +205,82 @@ export default function TasksPage() {
       </div>
 
       {/* KANBAN BOARD COLUMNS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-12">
+      <div className="flex gap-6 pb-12 overflow-x-auto snap-x">
         {COLUMNS.map((column) => {
           const columnTasks = tasks.filter((t) => t.status === column.id);
+          const colConf = statusConfig[column.id];
+          
           return (
             <div
               key={column.id}
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, column.id)}
-              className="flex flex-col h-[600px] bg-slate-950/30 border border-slate-900/60 rounded-2xl p-4 overflow-hidden"
+              className="flex flex-col min-w-[320px] w-[320px] h-[calc(100vh-300px)] min-h-[500px] bg-[rgba(255,255,255,0.01)] border border-[var(--border-subtle)] rounded-[var(--radius-card)] p-4 shrink-0 snap-start"
             >
               {/* Column Header */}
-              <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-900/50">
-                <span className="font-bold text-sm text-slate-200">{column.title}</span>
-                <span className="text-2xs font-semibold px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-400">
+              <div className={`flex justify-between items-center mb-4 pb-3 border-b border-[var(--border-subtle)] border-t-[3px] border-t-transparent ${column.borderColor.replace('border-', 'border-t-')}`}>
+                <div className="flex items-center gap-2">
+                  <div className={`status-dot ${colConf.dot}`}></div>
+                  <span className="font-semibold text-[0.875rem] text-[var(--text-primary)]">{column.title}</span>
+                </div>
+                <span className="text-[0.6875rem] font-medium px-2 py-0.5 rounded-[4px] bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)]">
                   {columnTasks.length}
                 </span>
               </div>
 
               {/* Column Cards scroll list */}
-              <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+              <div className="flex-1 overflow-y-auto space-y-3 pr-1 pb-4">
                 {tasksLoading ? (
-                  <div className="text-center py-8 text-xs text-slate-600 animate-pulse">Loading...</div>
+                  <div className="text-center py-8 text-[0.75rem] text-[var(--text-muted)] animate-pulse">Loading...</div>
                 ) : columnTasks.length === 0 ? (
-                  <div className="border border-dashed border-slate-900 rounded-xl py-8 text-center text-xs text-slate-600">
+                  <div className="border border-dashed border-[var(--border-subtle)] rounded-[var(--radius-btn)] py-8 text-center text-[0.75rem] text-[var(--text-muted)]">
                     Drop tasks here
                   </div>
                 ) : (
                   columnTasks.map((task) => {
                     const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'DONE';
+                    const prioConf = priorityConfig[task.priority];
+                    
                     return (
                       <div
                         key={task.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, task.id)}
                         onClick={() => handleCardClick(task)}
-                        className="glass-card p-4 rounded-xl border border-slate-900 bg-slate-900/20 cursor-grab active:cursor-grabbing hover:border-slate-800 hover:bg-slate-900/40 transition-all duration-200 relative group"
+                        className="card p-4 cursor-grab active:cursor-grabbing group hover:-translate-y-0.5"
                       >
-                        <div className="flex justify-between items-start gap-2 mb-2">
-                          <span className={`px-2 py-0.5 rounded text-3xs font-semibold uppercase ${
-                            task.priority === 'HIGH' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                            task.priority === 'MEDIUM' ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' :
-                            'bg-slate-500/10 text-slate-400 border border-slate-500/20'
-                          }`}>
-                            {task.priority}
+                        <div className="flex justify-between items-start gap-2 mb-2.5">
+                          <span className={`badge ${prioConf.bg} ${prioConf.text} uppercase`}>
+                            {prioConf.label}
                           </span>
                           {isOverdue && (
-                            <span className="flex items-center gap-1 text-3xs font-semibold text-red-400">
+                            <span className="flex items-center gap-1 text-[0.6875rem] font-medium text-[#EF4444]">
                               <AlertTriangle className="h-3 w-3" /> Overdue
                             </span>
                           )}
                         </div>
 
-                        <h4 className="font-semibold text-slate-200 text-sm mb-1 group-hover:text-white line-clamp-2 leading-snug">
+                        <h4 className="font-medium text-[var(--text-primary)] text-[0.875rem] mb-1.5 group-hover:text-[var(--brand)] transition-colors line-clamp-2 leading-snug">
                           {task.title}
                         </h4>
                         
                         {task.description && (
-                          <p className="text-xs text-slate-500 line-clamp-2 mb-4 leading-relaxed">
+                          <p className="text-[0.75rem] text-[var(--text-secondary)] line-clamp-2 mb-4 leading-relaxed">
                             {task.description}
                           </p>
                         )}
 
-                        <div className="flex flex-col gap-2 pt-3 border-t border-slate-950/40 text-3xs">
-                          {/* Project Tag */}
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate-500 bg-slate-950/50 px-2 py-1 rounded-md max-w-[130px] truncate border border-slate-800/50">
+                        <div className="flex flex-col gap-2.5 pt-3 border-t border-[var(--border-subtle)] mt-2">
+                          <div className="flex justify-between items-center text-[0.75rem]">
+                            <span className="text-[var(--text-muted)] bg-[rgba(255,255,255,0.02)] px-2 py-1 rounded-[4px] max-w-[130px] truncate border border-[var(--border-subtle)]">
                               {task.project?.name || 'No Project'}
                             </span>
 
-                            {/* Assignee / Initials */}
-                            <div className="flex items-center gap-1.5 bg-slate-900/50 pl-2 pr-1 py-1 rounded-full border border-slate-800/50">
-                              <span className="text-slate-400 font-medium truncate max-w-[80px]">
+                            <div className="flex items-center gap-1.5 bg-[rgba(255,255,255,0.02)] pl-2 pr-1 py-1 rounded-full border border-[var(--border-subtle)]">
+                              <span className="text-[var(--text-secondary)] font-medium truncate max-w-[80px] text-[0.6875rem]">
                                 {task.assignee?.name || 'Unassigned'}
                               </span>
-                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/20 border border-indigo-500/30 font-bold text-indigo-300">
+                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(255,255,255,0.05)] border border-[var(--border-subtle)] font-semibold text-[var(--text-primary)] text-[0.5rem]">
                                 {(task.assignee?.name || 'U').charAt(0).toUpperCase()}
                               </div>
                             </div>

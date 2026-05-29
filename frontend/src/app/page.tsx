@@ -11,13 +11,12 @@ import {
   Clock, 
   AlertTriangle, 
   Plus, 
-  Calendar, 
   ArrowRight,
   TrendingUp
 } from 'lucide-react';
 import Link from 'next/link';
 import CreateTaskDialog from '@/components/create-task-dialog';
-import { statusColors } from '@/lib/utils';
+import { statusConfig, priorityConfig } from '@/lib/utils';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
@@ -47,11 +46,11 @@ export default function DashboardPage() {
   const overdueTasks = tasks.filter(t => t.status !== 'DONE' && t.dueDate && new Date(t.dueDate) < now);
 
   const stats = [
-    { name: 'To Do', value: todoCount, icon: KanbanSquare, color: 'text-slate-400 border-slate-900' },
-    { name: 'In Progress', value: inProgressCount, icon: Clock, color: 'text-blue-400 border-blue-900/40' },
-    { name: 'In Review', value: inReviewCount, icon: TrendingUp, color: 'text-amber-400 border-amber-900/40' },
-    { name: 'Done', value: doneCount, icon: CheckCircle2, color: 'text-emerald-400 border-emerald-900/40' },
-    { name: 'Blocked', value: blockedCount, icon: AlertTriangle, color: 'text-red-400 border-red-900/40' },
+    { name: 'To Do', value: todoCount, icon: KanbanSquare, color: 'text-[#64748B]' },
+    { name: 'In Progress', value: inProgressCount, icon: Clock, color: 'text-[#3B82F6]' },
+    { name: 'In Review', value: inReviewCount, icon: TrendingUp, color: 'text-[#F59E0B]' },
+    { name: 'Done', value: doneCount, icon: CheckCircle2, color: 'text-[#22C55E]' },
+    { name: 'Blocked', value: blockedCount, icon: AlertTriangle, color: 'text-[#EF4444]' },
   ];
 
   return (
@@ -59,17 +58,17 @@ export default function DashboardPage() {
       {/* Welcome Banner */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-gradient">Dashboard</h1>
-          <p className="text-slate-400 mt-1">Hello, {user.name}. Here is what is happening today.</p>
+          <h1 className="page-title">Dashboard</h1>
+          <p className="text-[var(--text-secondary)] mt-1 text-[0.875rem]">Hello, {user.name}. Here is what is happening today.</p>
         </div>
 
         {/* Create Task Button (ADMIN & MANAGER only) */}
         {(user.role === 'ADMIN' || user.role === 'MANAGER') && (
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all cursor-pointer"
+            className="btn-primary flex items-center gap-2"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4" />
             New Task
           </button>
         )}
@@ -77,24 +76,24 @@ export default function DashboardPage() {
 
       {/* Overdue alert banner if any */}
       {overdueTasks.length > 0 && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 mb-8 flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-red-400 mt-0.5 flex-shrink-0" />
+        <div className="bg-[rgba(239,68,68,0.08)] border border-[rgba(239,68,68,0.2)] rounded-[var(--radius-card)] p-4 mb-8 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-[#EF4444] mt-0.5 flex-shrink-0" />
           <div>
-            <h4 className="font-semibold text-red-200">Attention: {overdueTasks.length} Overdue Tasks</h4>
-            <p className="text-red-300/80 text-sm mt-0.5">Please review the blocked or unfinished tasks that missed their deadlines.</p>
+            <h4 className="font-semibold text-[#FCA5A5] text-[0.875rem]">Attention: {overdueTasks.length} Overdue Tasks</h4>
+            <p className="text-[#FCA5A5]/80 text-[0.8125rem] mt-0.5">Please review the blocked or unfinished tasks that missed their deadlines.</p>
           </div>
         </div>
       )}
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
         {stats.map((stat) => (
-          <div key={stat.name} className="glass-card p-5 rounded-2xl border bg-slate-900/10">
+          <div key={stat.name} className="card p-5">
             <div className="flex justify-between items-start mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{stat.name}</span>
-              <stat.icon className={`h-5 w-5 ${stat.color.split(' ')[0]}`} />
+              <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{stat.name}</span>
+              <stat.icon className={`h-4 w-4 ${stat.color}`} />
             </div>
-            <div className="text-3xl font-extrabold text-slate-100">{stat.value}</div>
+            <div className="text-[1.75rem] font-bold text-[var(--text-primary)] leading-none">{stat.value}</div>
           </div>
         ))}
       </div>
@@ -102,10 +101,10 @@ export default function DashboardPage() {
       {/* Progress & Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Progress circular representation */}
-        <div className="glass-card p-6 rounded-2xl lg:col-span-1 flex flex-col justify-between">
+        <div className="card p-6 lg:col-span-1 flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-bold text-slate-200 mb-1">Completion Progress</h3>
-            <p className="text-slate-500 text-xs">Total task conversion metrics</p>
+            <h3 className="text-[1.125rem] font-semibold text-[var(--text-primary)] mb-1">Completion Progress</h3>
+            <p className="text-[var(--text-muted)] text-[0.8125rem]">Total task conversion metrics</p>
           </div>
 
           <div className="flex flex-col items-center justify-center my-6">
@@ -115,61 +114,61 @@ export default function DashboardPage() {
                   cx="64"
                   cy="64"
                   r="56"
-                  className="stroke-slate-900 fill-none"
+                  className="stroke-[var(--border-subtle)] fill-none"
                   strokeWidth="8"
                 />
                 <circle
                   cx="64"
                   cy="64"
                   r="56"
-                  className="stroke-indigo-500 fill-none transition-all duration-500"
+                  className="stroke-[var(--brand)] fill-none transition-all duration-500"
                   strokeWidth="8"
                   strokeDasharray={351.8}
                   strokeDashoffset={351.8 - (351.8 * completionRate) / 100}
                   strokeLinecap="round"
                 />
               </svg>
-              <div className="text-2xl font-extrabold text-slate-100">{completionRate}%</div>
+              <div className="text-[1.5rem] font-bold text-[var(--text-primary)]">{completionRate}%</div>
             </div>
           </div>
 
-          <div className="text-center text-xs text-slate-400 bg-slate-950/40 py-2.5 rounded-xl border border-slate-900/60">
+          <div className="text-center text-[0.8125rem] text-[var(--text-secondary)] bg-[rgba(255,255,255,0.02)] py-2.5 rounded-[var(--radius-btn)] border border-[var(--border-subtle)]">
             {doneCount} of {totalTasks} tasks resolved
           </div>
         </div>
 
         {/* Project breakdown cards */}
-        <div className="glass-card p-6 rounded-2xl lg:col-span-2">
-          <div className="flex justify-between items-center mb-4">
+        <div className="card p-6 lg:col-span-2">
+          <div className="flex justify-between items-center mb-5">
             <div>
-              <h3 className="text-lg font-bold text-slate-200">Projects Overview</h3>
-              <p className="text-slate-500 text-xs">Current active project details</p>
+              <h3 className="text-[1.125rem] font-semibold text-[var(--text-primary)] mb-1">Projects Overview</h3>
+              <p className="text-[var(--text-muted)] text-[0.8125rem]">Current active project details</p>
             </div>
-            <Link href="/projects" className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
+            <Link href="/projects" className="text-[0.8125rem] font-medium text-[var(--brand)] hover:text-[var(--brand-hover)] flex items-center gap-1 transition-colors">
               View All <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
 
           <div className="space-y-4">
             {projectsLoading ? (
-              <div className="h-32 flex items-center justify-center text-slate-500">Loading projects...</div>
+              <div className="h-32 flex items-center justify-center text-[var(--text-muted)] text-[0.875rem]">Loading projects...</div>
             ) : projects.length === 0 ? (
-              <div className="text-center py-8 text-slate-500 text-sm">No projects created yet.</div>
+              <div className="text-center py-8 text-[var(--text-muted)] text-[0.875rem]">No projects created yet.</div>
             ) : (
               projects.slice(0, 3).map((project) => {
                 const projectTasks = tasks.filter(t => t.projectId === project.id);
                 const projDone = projectTasks.filter(t => t.status === 'DONE').length;
                 const pct = projectTasks.length > 0 ? Math.round((projDone / projectTasks.length) * 100) : 0;
                 return (
-                  <div key={project.id} className="p-4 bg-slate-950/40 border border-slate-900/60 rounded-xl">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-slate-200 text-sm">{project.name}</span>
-                      <span className="text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/15 px-2 py-0.5 rounded-md">
+                  <div key={project.id} className="p-4 bg-[rgba(255,255,255,0.02)] border border-[var(--border-subtle)] rounded-[var(--radius-btn)]">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="font-medium text-[var(--text-primary)] text-[0.875rem]">{project.name}</span>
+                      <span className="text-[0.75rem] font-medium text-[var(--text-secondary)] bg-[rgba(255,255,255,0.04)] border border-[var(--border-subtle)] px-2 py-0.5 rounded-[4px]">
                         {projectTasks.length} tasks
                       </span>
                     </div>
-                    <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${pct}%` }}></div>
+                    <div className="w-full bg-[rgba(255,255,255,0.05)] h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-[var(--brand)] h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }}></div>
                     </div>
                   </div>
                 );
@@ -180,13 +179,13 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Tasks */}
-      <div className="glass-card p-6 rounded-2xl">
-        <div className="flex justify-between items-center mb-6">
+      <div className="card p-6">
+        <div className="flex justify-between items-center mb-5">
           <div>
-            <h3 className="text-lg font-bold text-slate-200">Recent Tasks</h3>
-            <p className="text-slate-500 text-xs">A snapshot of recent activity</p>
+            <h3 className="text-[1.125rem] font-semibold text-[var(--text-primary)] mb-1">Recent Tasks</h3>
+            <p className="text-[var(--text-muted)] text-[0.8125rem]">A snapshot of recent activity</p>
           </div>
-          <Link href="/tasks" className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
+          <Link href="/tasks" className="text-[0.8125rem] font-medium text-[var(--brand)] hover:text-[var(--brand-hover)] flex items-center gap-1 transition-colors">
             Go to Kanban <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -194,7 +193,7 @@ export default function DashboardPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-900 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+              <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)] text-[0.6875rem] font-semibold uppercase tracking-wider">
                 <th className="pb-3 pr-4">Task Name</th>
                 <th className="pb-3 px-4">Project</th>
                 <th className="pb-3 px-4">Status</th>
@@ -202,39 +201,39 @@ export default function DashboardPage() {
                 <th className="pb-3 pl-4">Due Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-900/40 text-sm">
+            <tbody className="divide-y divide-[var(--border-subtle)] text-[0.875rem]">
               {tasksLoading ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate-500">Loading tasks...</td>
+                  <td colSpan={5} className="py-8 text-center text-[var(--text-muted)]">Loading tasks...</td>
                 </tr>
               ) : tasks.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate-500">No tasks assigned to you.</td>
+                  <td colSpan={5} className="py-8 text-center text-[var(--text-muted)]">No tasks assigned to you.</td>
                 </tr>
               ) : (
-                tasks.slice(0, 5).map((task) => (
-                  <tr key={task.id} className="hover:bg-slate-900/20 group">
-                    <td className="py-3.5 pr-4 font-semibold text-slate-200">{task.title}</td>
-                    <td className="py-3.5 px-4 text-slate-400">{task.project?.name || 'Unassigned'}</td>
-                    <td className="py-3.5 px-4">
-                      <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium border ${statusColors[task.status]}`}>
-                        {task.status.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium uppercase ${
-                        task.priority === 'HIGH' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                        task.priority === 'MEDIUM' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
-                        'bg-slate-500/10 text-slate-400 border-slate-500/20'
-                      }`}>
-                        {task.priority}
-                      </span>
-                    </td>
-                    <td className="py-3.5 pl-4 text-slate-400">
-                      {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date'}
-                    </td>
-                  </tr>
-                ))
+                tasks.slice(0, 5).map((task) => {
+                  const statusConf = statusConfig[task.status];
+                  const prioConf = priorityConfig[task.priority];
+                  return (
+                    <tr key={task.id} className="hover:bg-[rgba(255,255,255,0.02)] transition-colors group">
+                      <td className="py-3.5 pr-4 font-medium text-[var(--text-primary)]">{task.title}</td>
+                      <td className="py-3.5 px-4 text-[var(--text-secondary)]">{task.project?.name || 'Unassigned'}</td>
+                      <td className="py-3.5 px-4">
+                        <span className={`badge ${statusConf.bg} ${statusConf.text}`}>
+                          {statusConf.label}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span className={`badge ${prioConf.bg} ${prioConf.text} uppercase`}>
+                          {prioConf.label}
+                        </span>
+                      </td>
+                      <td className="py-3.5 pl-4 text-[var(--text-secondary)]">
+                        {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date'}
+                      </td>
+                    </tr>
+                  )
+                })
               )}
             </tbody>
           </table>

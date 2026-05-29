@@ -16,8 +16,6 @@ import {
   Menu, 
   X, 
   Bell, 
-  ShieldAlert,
-  Check,
   CheckCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -84,15 +82,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-[var(--bg-app)] text-[var(--text-primary)] overflow-hidden">
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex md:w-64 md:flex-col glass-panel border-r border-slate-900">
+      <aside className="hidden md:flex md:w-64 md:flex-col bg-[var(--bg-app)] border-r border-[var(--border-subtle)] relative z-10">
         {/* Brand */}
-        <div className="flex h-16 items-center px-6 gap-2 border-b border-slate-900">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white shadow-lg shadow-indigo-500/30">
+        <div className="flex h-16 items-center px-6 gap-3 border-b border-[var(--border-subtle)]">
+          <div className="flex h-8 w-8 items-center justify-center rounded-[8px] bg-[var(--brand)] font-bold text-white shadow-lg shadow-[var(--brand-glow)]">
             A
           </div>
-          <span className="text-xl font-bold tracking-tight text-gradient">AeroTask</span>
+          <span className="text-[1.125rem] font-semibold tracking-tight text-[var(--text-primary)]">AeroTask</span>
         </div>
 
         {/* Navigation */}
@@ -104,14 +102,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 key={item.name}
                 href={item.href}
                 onMouseEnter={() => handlePrefetch(item.href)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-btn)] text-[0.875rem] font-medium transition-all duration-200 group border-l-[3px] ${
                   isActive
-                    ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/20'
-                    : 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 border border-transparent'
+                    ? 'bg-[var(--brand-soft)] text-[var(--brand)] border-[var(--brand)]'
+                    : 'text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.02)] hover:text-[var(--text-primary)] border-transparent'
                 }`}
               >
-                <item.icon className={`h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-110 ${
-                  isActive ? 'text-indigo-400' : 'text-slate-400 group-hover:text-slate-200'
+                <item.icon className={`h-[18px] w-[18px] transition-transform duration-200 ${
+                  isActive ? 'text-[var(--brand)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]'
                 }`} />
                 {item.name}
               </Link>
@@ -120,18 +118,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         {/* User Card */}
-        <div className="p-4 border-t border-slate-900/60 bg-slate-950/40">
-          <div className="flex items-center gap-3 mb-3 px-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 border border-slate-700 text-sm font-semibold text-slate-300">
+        <div className="p-4 border-t border-[var(--border-subtle)] bg-[rgba(255,255,255,0.01)]">
+          <div className="flex items-center gap-3 mb-4 px-2">
+            <div className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[rgba(255,255,255,0.05)] border border-[var(--border-subtle)] text-[0.8125rem] font-semibold text-[var(--text-primary)]">
               {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-slate-200 truncate">{user.name}</p>
-              <div className="flex items-center gap-1.5">
-                <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-2xs font-semibold uppercase ${
-                  user.role === 'ADMIN' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                  user.role === 'MANAGER' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                  'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+              <p className="text-[0.875rem] font-medium text-[var(--text-primary)] truncate">{user.name}</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={`badge ${
+                  user.role === 'ADMIN' ? 'bg-[rgba(239,68,68,0.12)] text-[#EF4444]' :
+                  user.role === 'MANAGER' ? 'bg-[rgba(245,158,11,0.12)] text-[#F59E0B]' :
+                  'bg-[rgba(59,130,246,0.12)] text-[#3B82F6]'
                 }`}>
                   {user.role}
                 </span>
@@ -140,30 +138,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 border border-transparent hover:border-red-500/20 transition-all duration-200"
+            className="flex w-full items-center gap-3 px-3 py-2 rounded-[var(--radius-btn)] text-[0.875rem] font-medium text-[var(--text-muted)] hover:bg-[rgba(239,68,68,0.08)] hover:text-[#EF4444] transition-all duration-200"
           >
-            <LogOut className="h-4.5 w-4.5" />
+            <LogOut className="h-[18px] w-[18px]" />
             Sign Out
           </button>
         </div>
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden bg-[var(--bg-content)]">
         {/* Top Header */}
-        <header className="flex h-16 items-center justify-between px-6 border-b border-slate-900/50 glass-panel">
+        <header className="flex h-16 items-center justify-between px-6 border-b border-[var(--border-subtle)] bg-[var(--bg-app)] relative z-20">
           {/* Mobile Menu Trigger */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:bg-slate-900"
+            className="md:hidden p-2 -ml-2 rounded-[var(--radius-btn)] text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.05)]"
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5" />
           </button>
 
           {/* Org Name */}
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-xs text-slate-500 font-mono">ORGANIZATION:</span>
-            <span className="text-sm font-semibold text-slate-300">Acme Corporation</span>
+            <span className="text-[0.6875rem] text-[var(--text-muted)] font-mono font-medium tracking-widest uppercase">ORGANIZATION:</span>
+            <span className="text-[0.875rem] font-medium text-[var(--text-primary)]">Acme Corporation</span>
           </div>
 
           {/* Alerts / Profile */}
@@ -171,11 +169,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="relative">
               <button 
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className={`p-2 rounded-lg transition-colors relative ${isNotificationsOpen ? 'bg-slate-900 text-slate-200' : 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200'}`}
+                className={`p-2 rounded-[var(--radius-btn)] transition-colors relative ${isNotificationsOpen ? 'bg-[rgba(255,255,255,0.05)] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.03)] hover:text-[var(--text-primary)]'}`}
               >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-indigo-500 ring-2 ring-slate-950"></span>
+                  <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-[var(--brand)] ring-2 ring-[var(--bg-app)]"></span>
                 )}
               </button>
 
@@ -188,13 +186,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     onClick={() => setIsNotificationsOpen(false)}
                   ></div>
                   
-                  <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col">
-                    <div className="p-3 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900/95 backdrop-blur-sm z-10">
-                      <h3 className="font-semibold text-sm text-slate-200">Notifications {unreadCount > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 text-xs">{unreadCount}</span>}</h3>
+                  <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-[var(--radius-card)] shadow-2xl z-50 overflow-hidden flex flex-col">
+                    <div className="p-3 border-b border-[var(--border-subtle)] flex items-center justify-between sticky top-0 bg-[var(--bg-card)]/95 backdrop-blur-sm z-10">
+                      <h3 className="font-semibold text-[0.875rem] text-[var(--text-primary)]">Notifications {unreadCount > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full bg-[var(--brand-soft)] text-[var(--brand)] text-[0.6875rem]">{unreadCount}</span>}</h3>
                       {unreadCount > 0 && (
                         <button 
                           onClick={(e) => { e.stopPropagation(); markAllAsRead(); }}
-                          className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors"
+                          className="text-[0.75rem] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors"
                         >
                           <CheckCheck className="h-3.5 w-3.5" /> Mark all read
                         </button>
@@ -203,12 +201,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     
                     <div className="flex-1 overflow-y-auto">
                       {notifications.length === 0 ? (
-                        <div className="p-6 text-center text-sm text-slate-500">
+                        <div className="p-6 text-center text-[0.875rem] text-[var(--text-muted)]">
                           <Bell className="h-8 w-8 mx-auto mb-2 opacity-20" />
                           No notifications yet
                         </div>
                       ) : (
-                        <div className="flex flex-col divide-y divide-slate-800/50">
+                        <div className="flex flex-col divide-y divide-[var(--border-subtle)]">
                           {notifications.map((notification) => (
                             <div 
                               key={notification.id}
@@ -219,17 +217,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                   setIsNotificationsOpen(false);
                                 }
                               }}
-                              className={`p-3 hover:bg-slate-800/50 transition-colors cursor-pointer flex gap-3 ${!notification.isRead ? 'bg-slate-800/20' : ''}`}
+                              className={`p-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors cursor-pointer flex gap-3 ${!notification.isRead ? 'bg-[rgba(91,91,214,0.05)]' : ''}`}
                             >
-                              <div className={`mt-0.5 h-2 w-2 shrink-0 rounded-full ${!notification.isRead ? 'bg-indigo-500' : 'bg-transparent'}`}></div>
+                              <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${!notification.isRead ? 'bg-[var(--brand)]' : 'bg-transparent'}`}></div>
                               <div className="flex-1 min-w-0">
-                                <p className={`text-sm font-medium truncate ${!notification.isRead ? 'text-slate-200' : 'text-slate-400'}`}>
+                                <p className={`text-[0.875rem] font-medium truncate ${!notification.isRead ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>
                                   {notification.title}
                                 </p>
-                                <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">
+                                <p className="text-[0.75rem] text-[var(--text-muted)] mt-0.5 line-clamp-2">
                                   {notification.message}
                                 </p>
-                                <p className="text-2xs text-slate-600 mt-1.5 font-medium">
+                                <p className="text-[0.6875rem] text-[var(--text-muted)] mt-1.5 font-medium">
                                   {formatRelativeTime(notification.createdAt)}
                                 </p>
                               </div>
@@ -242,38 +240,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </>
               )}
             </div>
-            <div className="h-8 w-px bg-slate-900"></div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-slate-300">{user.name}</span>
-            </div>
           </div>
         </header>
 
         {/* Main Content Scroll Container */}
-        <main className="flex-1 overflow-y-auto bg-slate-950/20 p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">
           {children}
         </main>
       </div>
 
       {/* MOBILE SIDEBAR MENU */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative flex w-full max-w-xs flex-col bg-slate-950 border-r border-slate-900 p-6">
+        <div className="fixed inset-0 z-50 flex md:hidden modal-backdrop">
+          <div className="relative flex w-full max-w-xs flex-col h-full bg-[var(--bg-app)] border-r border-[var(--border-subtle)] p-6 ml-0 mr-auto shadow-2xl">
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-lg text-slate-400 hover:bg-slate-900"
+              className="absolute top-4 right-4 p-2 rounded-[var(--radius-btn)] text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.05)]"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center gap-2 mb-8">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white">
+            <div className="flex items-center gap-3 mb-8 mt-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-[8px] bg-[var(--brand)] font-bold text-white shadow-lg shadow-[var(--brand-glow)]">
                 A
               </div>
-              <span className="text-xl font-bold tracking-tight text-gradient">AeroTask</span>
+              <span className="text-[1.125rem] font-semibold tracking-tight text-[var(--text-primary)]">AeroTask</span>
             </div>
 
-            <nav className="flex-1 space-y-2">
+            <nav className="flex-1 space-y-1.5">
               {filteredNavigation.map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -281,36 +275,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     key={item.name}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-btn)] text-[0.875rem] font-medium transition-all border-l-[3px] ${
                       isActive
-                        ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/20'
-                        : 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200'
+                        ? 'bg-[var(--brand-soft)] text-[var(--brand)] border-[var(--brand)]'
+                        : 'text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.02)] hover:text-[var(--text-primary)] border-transparent'
                     }`}
                   >
-                    <item.icon className="h-5 w-5" />
+                    <item.icon className={`h-[18px] w-[18px] ${isActive ? 'text-[var(--brand)]' : 'text-[var(--text-muted)]'}`} />
                     {item.name}
                   </Link>
                 );
               })}
             </nav>
 
-            <div className="mt-auto border-t border-slate-900 pt-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 text-sm font-semibold text-slate-300">
+            <div className="mt-auto border-t border-[var(--border-subtle)] pt-4">
+              <div className="flex items-center gap-3 mb-4 px-2">
+                <div className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[rgba(255,255,255,0.05)] border border-[var(--border-subtle)] text-[0.8125rem] font-semibold text-[var(--text-primary)]">
                   {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-200">{user.name}</p>
-                  <span className="inline-flex items-center rounded-md bg-indigo-500/10 px-1.5 py-0.5 text-2xs font-semibold text-indigo-400 uppercase">
+                  <p className="text-[0.875rem] font-medium text-[var(--text-primary)]">{user.name}</p>
+                  <span className={`badge mt-0.5 ${
+                    user.role === 'ADMIN' ? 'bg-[rgba(239,68,68,0.12)] text-[#EF4444]' :
+                    user.role === 'MANAGER' ? 'bg-[rgba(245,158,11,0.12)] text-[#F59E0B]' :
+                    'bg-[rgba(59,130,246,0.12)] text-[#3B82F6]'
+                  }`}>
                     {user.role}
                   </span>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                className="flex w-full items-center gap-3 px-3 py-2 rounded-[var(--radius-btn)] text-[0.875rem] font-medium text-[var(--text-muted)] hover:bg-[rgba(239,68,68,0.08)] hover:text-[#EF4444] transition-colors"
               >
-                <LogOut className="h-5 w-5" />
+                <LogOut className="h-[18px] w-[18px]" />
                 Sign Out
               </button>
             </div>
