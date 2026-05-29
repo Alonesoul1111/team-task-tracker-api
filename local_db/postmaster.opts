@@ -1,1 +1,0 @@
-/usr/lib/postgresql/18/bin/postgres "-D" "/run/media/alone/1C9ECEAE9ECE802E/team-task-tracker-api/local_db" "-F" "-p" "5432" "-h" "localhost"
