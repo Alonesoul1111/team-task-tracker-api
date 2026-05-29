@@ -66,7 +66,7 @@ export default function EditTaskDialog({ isOpen, onClose, task }: EditTaskDialog
         title,
         description,
         priority,
-        status,
+        status: status as any,
         projectId,
         assigneeId: assigneeId || undefined,
         dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
