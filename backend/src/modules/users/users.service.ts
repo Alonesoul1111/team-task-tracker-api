@@ -1,7 +1,7 @@
 import { prisma } from '../../config/database';
 import { AppError, Errors } from '../../utils/errors';
 import { logger } from '../../utils/logger';
-import { Role, Prisma } from '@prisma/client';
+import { Role, UserStatus, Prisma } from '@prisma/client';
 
 export class UsersService {
   async listUsers(
@@ -27,6 +27,7 @@ export class UsersService {
           email: true,
           name: true,
           role: true,
+          status: true,
           organizationId: true,
           createdAt: true,
         },
@@ -48,6 +49,7 @@ export class UsersService {
         email: true,
         name: true,
         role: true,
+        status: true,
         organizationId: true,
         createdAt: true,
         _count: { select: { assignedTasks: true } },
@@ -101,6 +103,29 @@ export class UsersService {
 
     await prisma.user.delete({ where: { id: userId } });
     logger.info(`User deleted: ${user.email}`);
+  }
+
+  async updateUserStatus(userId: string, status: UserStatus, organizationId: string, requesterId: string) {
+    if (userId === requesterId) {
+      throw new AppError(400, 'VALIDATION_ERROR', 'Cannot change your own status');
+    }
+
+    const user = await prisma.user.findFirst({
+      where: { id: userId, organizationId },
+    });
+
+    if (!user) {
+      throw Errors.NOT_FOUND('User');
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: { status },
+      select: { id: true, email: true, name: true, role: true, status: true },
+    });
+
+    logger.info(`User status updated: ${updated.email} → ${status}`);
+    return updated;
   }
 }
 

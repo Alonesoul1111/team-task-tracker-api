@@ -101,6 +101,7 @@ export class AuthService {
         email: true,
         name: true,
         role: true,
+        status: true,
         organizationId: true,
         password: true,
         createdAt: true,
@@ -114,6 +115,11 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(input.password, user.password);
     if (!isPasswordValid) {
       throw Errors.INVALID_CREDENTIALS();
+    }
+
+    // Block inactive or departed users from logging in
+    if (user.status !== 'ACTIVE') {
+      throw new AppError(403, 'ACCOUNT_DISABLED', 'Your account has been deactivated. Please contact your administrator.');
     }
 
     // Generate tokens

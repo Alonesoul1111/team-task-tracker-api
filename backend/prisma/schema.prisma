@@ -19,6 +19,12 @@ enum Role {
   MEMBER
 }
 
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  LEFT
+}
+
 enum TaskPriority {
   LOW
   MEDIUM
@@ -52,8 +58,9 @@ model User {
   email          String   @unique
   password       String
   name           String
-  role           Role     @default(MEMBER)
-  organizationId String   @map("organization_id")
+  role           Role       @default(MEMBER)
+  status         UserStatus @default(ACTIVE) @map("status")
+  organizationId String     @map("organization_id")
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
@@ -61,6 +68,7 @@ model User {
   assignedTasks Task[]        @relation("TaskAssignee")
   createdTasks  Task[]        @relation("TaskCreator")
   refreshTokens RefreshToken[]
+  comments      Comment[]
 
   @@index([organizationId])
   @@index([email])
@@ -99,6 +107,9 @@ model Task {
   assignee User?   @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
   creator  User    @relation("TaskCreator", fields: [creatorId], references: [id], onDelete: Cascade)
   project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  comments Comment[]
+  subTasks SubTask[]
 
   // Indexes for optimized queries on frequently filtered columns
   @@index([status])
@@ -125,3 +136,32 @@ model RefreshToken {
   @@index([userId])
   @@map("refresh_tokens")
 }
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  taskId    String   @map("task_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([taskId])
+  @@map("comments")
+}
+
+model SubTask {
+  id        String   @id @default(uuid())
+  title     String
+  isDone    Boolean  @default(false) @map("is_done")
+  taskId    String   @map("task_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("subtasks")
+}
+

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { usersController } from './users.controller';
 import { authenticate, authorize, validate, asyncHandler } from '../../middleware';
-import { updateUserRoleSchema, listUsersQuerySchema } from './users.validation';
+import { updateUserRoleSchema, updateUserStatusSchema, listUsersQuerySchema } from './users.validation';
 
 const router = Router();
 
@@ -74,5 +74,12 @@ router.patch(
  *       - bearerAuth: []
  */
 router.delete('/:id', authorize('ADMIN'), asyncHandler(usersController.delete));
+
+router.patch(
+  '/:id/status',
+  authorize('ADMIN'),
+  validate(updateUserStatusSchema),
+  asyncHandler(usersController.updateStatus)
+);
 
 export { router as userRoutes };

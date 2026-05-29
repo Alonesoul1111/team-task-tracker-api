@@ -18,7 +18,7 @@ export class UsersController {
 
   async getById(req: Request, res: Response) {
     const user = await usersService.getUserById(
-      req.params.id,
+      req.params.id as string,
       req.user!.organizationId
     );
     return ApiResponse.success(res, user);
@@ -26,7 +26,7 @@ export class UsersController {
 
   async updateRole(req: Request, res: Response) {
     const user = await usersService.updateUserRole(
-      req.params.id,
+      req.params.id as string,
       req.body.role,
       req.user!.organizationId
     );
@@ -35,11 +35,21 @@ export class UsersController {
 
   async delete(req: Request, res: Response) {
     await usersService.deleteUser(
-      req.params.id,
+      req.params.id as string,
       req.user!.organizationId,
       req.user!.id
     );
     return ApiResponse.noContent(res);
+  }
+
+  async updateStatus(req: Request, res: Response) {
+    const user = await usersService.updateUserStatus(
+      req.params.id as string,
+      req.body.status,
+      req.user!.organizationId,
+      req.user!.id
+    );
+    return ApiResponse.success(res, user);
   }
 }
 
